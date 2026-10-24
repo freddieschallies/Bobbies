@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Bobbies POS</title>
+  <link rel="stylesheet" href="till.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" id="shopName">Bobbies</div>
+    <nav class="views">
+      <button class="view-btn active" data-view="sell">Sell</button>
+      <button class="view-btn" data-view="settings">Settings <kbd>F10</kbd></button>
+    </nav>
+    <div class="clock" id="clock"></div>
+  </header>
+
+  <main>
+    <!-- ================= SELL ================= -->
+    <section id="view-sell" class="view">
+      <div class="catalog">
+        <input id="search" class="search" autocomplete="off" spellcheck="false"
+               placeholder="Type a product name, then Enter to add">
+        <div id="catTabs" class="cat-tabs"></div>
+        <div id="productGrid" class="product-grid"></div>
+      </div>
+
+      <aside class="sale">
+        <h2>Current sale</h2>
+        <ul id="saleLines" class="sale-lines"></ul>
+        <div class="sale-total"><span>Total</span><strong id="saleTotal">R 0.00</strong></div>
+        <div class="pay">
+          <button id="btnCash" class="btn-pay pay-cash">Cash <kbd>F1</kbd></button>
+          <button id="btnCard" class="btn-pay pay-card">Card <kbd>F2</kbd></button>
+        </div>
+        <button id="btnClear" class="btn-ghost">Clear sale <kbd>Esc</kbd></button>
+        <div id="lastSale" class="last-sale"></div>
+        <p class="hints">
+          <kbd>↑</kbd><kbd>↓</kbd> pick a line &nbsp; <kbd>+</kbd><kbd>−</kbd> change amount &nbsp; <kbd>Del</kbd> remove line
+        </p>
+      </aside>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section id="view-settings" class="view" hidden>
+      <nav class="subtabs">
+        <button class="sub-btn active" data-panel="products">Products &amp; stock</button>
+        <button class="sub-btn" data-panel="categories">Categories</button>
+        <button class="sub-btn" data-panel="screen">Main screen &amp; videos</button>
+        <button class="sub-btn" data-panel="cashup">Cash-up</button>
+        <button class="sub-btn" data-panel="general">General</button>
+      </nav>
+
+      <div class="panel" id="panel-products">
+        <div class="toolbar">
+          <button id="btnAddProduct" class="btn">+ Add product</button>
+          <input id="productFilter" class="input" placeholder="Filter products">
+        </div>
+        <table class="table">
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>In stock</th><th>Low at</th><th>On menu</th><th></th></tr></thead>
+          <tbody id="productRows"></tbody>
+        </table>
+      </div>
+
+      <div class="panel" id="panel-categories" hidden>
+        <div class="toolbar">
+          <input id="newCategory" class="input" placeholder="New category name">
+          <button id="btnAddCategory" class="btn">+ Add category</button>
+        </div>
+        <ul id="categoryRows" class="cat-list"></ul>
+      </div>
+
+      <div class="panel" id="panel-screen" hidden>
+        <div class="cards">
+          <div class="card">
+            <h3>Video timing</h3>
+            <label>Play a video every <input id="setInterval" class="input small" type="number" min="1" max="120"> minutes</label>
+            <label>Wait <input id="setResume" class="input small" type="number" min="0" max="600"> seconds after a sale before videos can play</label>
+            <label class="check"><input id="setSound" type="checkbox"> Play video sound</label>
+            <p class="note">Videos never play while a sale is open on the till.</p>
+            <button id="btnSaveScreen" class="btn">Save</button>
+          </div>
+          <div class="card">
+            <h3>Menu screen</h3>
+            <button id="btnTestVideo" class="btn-ghost">Play a video now</button>
+            <button id="btnPlaceMenu" class="btn-ghost">Move menu to the TV</button>
+            <button id="btnReloadMenu" class="btn-ghost">Reload menu screen</button>
+            <p class="note" id="screenNote"></p>
+          </div>
+        </div>
+        <div class="toolbar">
+          <h3 class="grow">Videos</h3>
+          <button id="btnAddVideos" class="btn">+ Upload videos</button>
+        </div>
+        <p class="note">Upload as many as you like — they shuffle and play in random order. Vertical videos get a blurred fill on the sides.</p>
+        <table class="table">
+          <thead><tr><th>Video</th><th>Added</th><th>Playing</th><th></th></tr></thead>
+          <tbody id="videoRows"></tbody>
+        </table>
+      </div>
+
+      <div class="panel" id="panel-cashup" hidden>
+        <div class="toolbar">
+          <label>Day <input id="cashupDate" class="input" type="date"></label>
+          <button id="btnPrintCashup" class="btn-ghost">Print</button>
+        </div>
+        <div id="cashupBody"></div>
+      </div>
+
+      <div class="panel" id="panel-general" hidden>
+        <div class="card narrow">
+          <label>Shop name <input id="setShopName" class="input"></label>
+          <label class="check"><input id="setAutoStart" type="checkbox"> Start Bobbies POS when the PC switches on</label>
+          <button id="btnSaveGeneral" class="btn">Save</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="modal" class="modal">
+    <form id="modalForm" method="dialog">
+      <h2 id="modalTitle"></h2>
+      <div id="modalBody"></div>
+      <p id="modalError" class="error"></p>
+      <div class="modal-actions">
+        <button type="button" id="modalCancel" class="btn-ghost">Cancel <kbd>Esc</kbd></button>
+        <button type="submit" id="modalOk" class="btn">OK <kbd>Enter</kbd></button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="../shared/format.js"></script>
+  <script src="till.js"></script>
+</body>
+</html>

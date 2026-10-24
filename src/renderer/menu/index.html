@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; media-src media:; img-src 'self' data:">
+  <title>Bobbies Menu</title>
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <div id="menu" class="menu">
+    <header class="menu-head">
+      <h1 id="shopName">Bobbies</h1>
+      <div id="clock" class="clock"></div>
+    </header>
+    <main id="board" class="board"></main>
+  </div>
+
+  <!-- Video takeover. The canvas is a blurred, stretched copy of the video so
+       vertical or odd-shaped clips never leave black bars. -->
+  <div id="videoLayer" class="video-layer">
+    <canvas id="blurBg" class="blur-bg" width="96" height="54"></canvas>
+    <video id="vid" class="vid" playsinline preload="auto"></video>
+  </div>
+
+  <script src="../shared/format.js"></script>
+  <script src="menu.js"></script>
+</body>
+</html>

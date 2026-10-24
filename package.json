@@ -1,0 +1,36 @@
+{
+  "name": "bobbies-pos",
+  "productName": "Bobbies POS",
+  "version": "0.1.0",
+  "description": "Point of sale with a live customer menu screen and promo videos.",
+  "main": "src/main/main.js",
+  "author": "Fred",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "za.co.bobbies.pos",
+    "productName": "Bobbies POS",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Bobbies POS"
+    }
+  }
+}
