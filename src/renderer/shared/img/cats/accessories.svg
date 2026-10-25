@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
+  <!-- Grinder and a pack of papers -->
+  <g stroke="#1a120b" stroke-width="5" stroke-linejoin="round">
+    <rect x="128" y="34" width="72" height="104" rx="6" fill="#ff9f1c" transform="rotate(10 164 86)"/>
+    <rect x="136" y="44" width="56" height="20" rx="3" fill="#fffaf0" transform="rotate(10 164 86)"/>
+    <path d="M18 112 L 18 82 C 18 64 50 54 82 54 C 114 54 146 64 146 82 L 146 112 C 146 130 114 140 82 140 C 50 140 18 130 18 112 Z" fill="#7d8b99"/>
+    <ellipse cx="82" cy="82" rx="64" ry="26" fill="#a9b6c2"/>
+    <ellipse cx="82" cy="82" rx="40" ry="15" fill="#c9d3dc"/>
+    <path d="M18 98 C 40 116 124 116 146 98" fill="none"/>
+  </g>
+  <g stroke="#1a120b" stroke-width="3" opacity="0.6"><path d="M32 110 L 32 124 M52 116 L 52 130 M72 118 L 72 132 M92 118 L 92 132 M112 116 L 112 130 M132 110 L 132 124"/></g>
+  <circle cx="82" cy="82" r="6" fill="#1a120b"/>
+</svg>

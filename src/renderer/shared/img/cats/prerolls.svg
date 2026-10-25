@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
+  <!-- Two cone joints with a curl of smoke -->
+  <g stroke="#1a120b" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M30 140 L 176 52 L 196 82 L 44 156 Z" fill="#fffaf0"/>
+    <path d="M30 140 L 44 156 L 58 149 L 44 132 Z" fill="#d9a54a"/>
+    <path d="M176 52 C 186 40 200 44 204 56 C 210 66 204 78 196 82" fill="#fffaf0"/>
+    <path d="M24 104 L 150 30 L 164 52 L 36 120 Z" fill="#f4ecd8"/>
+    <path d="M24 104 L 36 120 L 48 113 L 36 97 Z" fill="#d9a54a"/>
+    <path d="M150 30 C 158 20 170 22 172 32 C 176 40 170 48 164 52" fill="#f4ecd8"/>
+    <path d="M80 90 L 92 110 M110 74 L 122 94 M140 58 L 152 78" stroke-width="3" opacity="0.5"/>
+  </g>
+  <path d="M206 50 C 196 34 214 26 204 10" fill="none" stroke="#9aa5ae" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="200" cy="66" r="7" fill="#ff8c1a" stroke="#1a120b" stroke-width="4"/>
+</svg>

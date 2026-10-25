@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
+  <!-- Gummy bear and a brownie -->
+  <g stroke="#1a120b" stroke-width="5" stroke-linejoin="round">
+    <rect x="112" y="72" width="92" height="74" rx="10" fill="#7a4b1d"/>
+    <path d="M112 86 C 130 70 150 92 170 76 C 186 64 196 80 204 74 L 204 82 C 196 86 186 74 170 86 C 150 100 130 78 112 94 Z" fill="#4f2f10"/>
+    <circle cx="56" cy="50" r="14" fill="#e5484d"/><circle cx="96" cy="50" r="14" fill="#e5484d"/>
+    <circle cx="76" cy="66" r="28" fill="#ff6b6b"/>
+    <ellipse cx="76" cy="118" rx="36" ry="38" fill="#ff6b6b"/>
+    <circle cx="42" cy="104" r="12" fill="#e5484d"/><circle cx="110" cy="104" r="12" fill="#e5484d"/>
+    <circle cx="52" cy="148" r="13" fill="#e5484d"/><circle cx="100" cy="148" r="13" fill="#e5484d"/>
+  </g>
+  <circle cx="66" cy="62" r="4" fill="#1a120b"/><circle cx="86" cy="62" r="4" fill="#1a120b"/>
+  <path d="M68 76 Q 76 82 84 76" fill="none" stroke="#1a120b" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="64" cy="104" rx="8" ry="14" fill="#fff" opacity="0.5"/>
+  <g fill="#6fd13c" stroke="#1a120b" stroke-width="3"><path d="M150 112 l6 -14 l6 14 l-6 6 z"/></g>
+</svg>

@@ -17,6 +17,11 @@ contextBridge.exposeInMainWorld('pos', {
   videoUrl: (file) => `media://v/${encodeURIComponent(file)}`,
   onTestVideo: (cb) => ipcRenderer.on('video:test', () => cb()),
 
+  // What the TV is showing, so the till's mini TV can follow it
+  sendTvStatus: (s) => ipcRenderer.send('tv-status', s),
+  getTvStatus: () => ipcRenderer.invoke('tv-status:get'),
+  onTvStatus: (cb) => ipcRenderer.on('tv-status', (_e, s) => cb(s)),
+
   placeMenu: () => ipcRenderer.invoke('menu:place'),
   reloadMenu: () => ipcRenderer.invoke('menu:reload'),
 });

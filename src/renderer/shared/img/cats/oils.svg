@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
+  <!-- Dropper bottle with a drop -->
+  <g stroke="#1a120b" stroke-width="5" stroke-linejoin="round">
+    <path d="M96 4 C 84 4 82 18 90 26 L 90 40 L 126 40 L 126 26 C 134 18 132 4 120 4 Z" fill="#1a120b"/>
+    <rect x="84" y="38" width="48" height="22" rx="4" fill="#3a3a3a"/>
+    <path d="M72 70 C 72 60 80 58 108 58 C 136 58 144 60 144 70 L 150 150 C 150 160 142 164 108 164 C 74 164 66 160 66 150 Z" fill="#c8741d"/>
+    <rect x="78" y="94" width="60" height="44" rx="6" fill="#fffaf0"/>
+  </g>
+  <g transform="translate(108 118) scale(0.16)" fill="#2f9e2f" stroke="#1a120b" stroke-width="18">
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z"/>
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z" transform="rotate(-45) scale(0.8)"/>
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z" transform="rotate(45) scale(0.8)"/>
+  </g>
+  <path d="M80 76 L 76 140" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity="0.5"/>
+  <path d="M182 70 C 196 92 196 104 182 108 C 168 104 168 92 182 70 Z" fill="#ffb347" stroke="#1a120b" stroke-width="5" stroke-linejoin="round"/>
+</svg>

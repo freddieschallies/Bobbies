@@ -137,6 +137,13 @@ class Store {
     if (!Number.isFinite(price) || price < 0) throw new StoreError('Enter a valid price.');
     const lowStock = round2(input.lowStock || 0);
     if (lowStock < 0) throw new StoreError('Low-stock level cannot be negative.');
+    // Specials: an optional lower price. Empty means no special.
+    let specialPrice = null;
+    if (input.specialPrice !== null && input.specialPrice !== undefined && input.specialPrice !== '') {
+      specialPrice = Math.round(Number(input.specialPrice));
+      if (!Number.isFinite(specialPrice) || specialPrice < 0) throw new StoreError('Enter a valid special price.');
+      if (specialPrice >= price) throw new StoreError('The special price must be lower than the normal price.');
+    }
 
     let product = input.id ? this.data.products.find((p) => p.id === input.id) : null;
     if (input.id && !product) throw new StoreError('Product not found.');
@@ -154,6 +161,7 @@ class Store {
       unit,
       weighed,
       price,
+      specialPrice,
       lowStock,
       active: input.active !== false,
       description: String(input.description || '').trim(),
@@ -219,9 +227,13 @@ class Store {
       const p = this._product(productId);
       if (!p.weighed && !Number.isInteger(qty)) throw new StoreError(`${p.name} is sold in whole units.`);
       if (qty > p.stock) throw new StoreError(`Not enough ${p.name} — only ${p.stock} ${p.unit} left.`);
-      saleLines.push({ productId, name: p.name, unit: p.unit, qty, price: p.price, total: Math.round(p.price * qty) });
+      const price = effectivePrice(p);
+      const full = Math.round(p.price * qty);
+      const total = Math.round(price * qty);
+      saleLines.push({ productId, name: p.name, unit: p.unit, qty, price, fullPrice: p.price, discount: full - total, total });
     }
     const total = saleLines.reduce((s, l) => s + l.total, 0);
+    const discount = saleLines.reduce((s, l) => s + l.discount, 0);
 
     let change = 0;
     let paid = total;
@@ -242,6 +254,8 @@ class Store {
       at: new Date().toISOString(),
       method,
       lines: saleLines,
+      subtotal: total + discount,
+      discount,
       total,
       paid,
       change,
@@ -256,9 +270,11 @@ class Store {
     const sales = this.data.sales.filter((s) => localDate(new Date(s.at)) === dateStr);
     const byMethod = { cash: { count: 0, total: 0 }, card: { count: 0, total: 0 } };
     const items = new Map();
+    let discount = 0;
     for (const s of sales) {
       byMethod[s.method].count += 1;
       byMethod[s.method].total += s.total;
+      discount += s.discount || 0;
       for (const l of s.lines) {
         const it = items.get(l.productId) || { name: l.name, unit: l.unit, qty: 0, total: 0 };
         it.qty = round2(it.qty + l.qty);
@@ -270,6 +286,7 @@ class Store {
       date: dateStr,
       count: sales.length,
       total: byMethod.cash.total + byMethod.card.total,
+      discount,
       byMethod,
       items: [...items.values()].sort((a, b) => b.total - a.total),
       sales: sales.map((s) => ({ no: s.no, at: s.at, method: s.method, total: s.total })),
@@ -315,6 +332,11 @@ class Store {
   }
 }
 
+// The price a product sells for right now: its special price when it has one.
+function effectivePrice(p) {
+  return p.specialPrice !== null && p.specialPrice !== undefined && p.specialPrice < p.price ? p.specialPrice : p.price;
+}
+
 function clamp(n, lo, hi) {
   if (!Number.isFinite(n)) return lo;
   return Math.min(hi, Math.max(lo, n));
@@ -325,4 +347,4 @@ function localDate(d) {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
-module.exports = { Store, StoreError, localDate };
+module.exports = { Store, StoreError, localDate, effectivePrice };

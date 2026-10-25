@@ -8,33 +8,54 @@
   <link rel="stylesheet" href="till.css">
 </head>
 <body class="beach-bg">
-  <header class="topbar">
-    <div class="mascot head-mascot" aria-hidden="true"></div>
+  <!-- Hero: Bobby, the shop sign, a live view of the TV and the clock. Stays for both Sell and Settings. -->
+  <header class="hero">
+    <div class="hero-mascot">
+      <div class="mascot-wrap">
+        <div class="mascot big-mascot" aria-hidden="true"></div>
+        <div class="toon-script hero-bubble">Howzit!</div>
+      </div>
+      <div class="toon-script side-line">Support local…<br><span>grow together!</span></div>
+      <img class="side-leaf" src="../shared/img/leaf.svg" alt="">
+    </div>
     <div class="brand">
+      <div class="toon-script bobby-g">Bobby G's</div>
       <div class="toon-title brand-name" id="shopName">BGF420 <span class="white">Clubhouse</span></div>
       <div class="toon-script brand-tag" id="shopTag"></div>
     </div>
-    <nav class="views">
-      <button class="view-btn active" data-view="sell">Sell</button>
-      <button class="view-btn" data-view="settings">Settings <kbd>F10</kbd></button>
-    </nav>
-    <div class="clock" id="clock"></div>
+    <div class="hero-right">
+    <div class="hero-tv">
+      <div class="tv-frame" id="tvFrame"></div>
+      <div class="tv-label"><i class="live-dot"></i><span id="tvLabel">On the TV now: menu</span></div>
+    </div>
+    <div class="hero-side">
+      <div class="clock-badge"><div id="date"></div><div id="clock" class="clock"></div></div>
+      <button class="view-toggle" id="viewToggle" title="Settings (F10)">Settings <kbd>F10</kbd></button>
+    </div>
+    </div>
   </header>
-  <div class="thatch"></div>
 
   <main>
     <!-- ================= SELL ================= -->
     <section id="view-sell" class="view">
       <div class="catalog">
-        <input id="search" class="search" autocomplete="off" spellcheck="false"
-               placeholder="Type a product name, then Enter to add">
-        <div id="catTabs" class="cat-tabs"></div>
-        <div id="productGrid" class="product-grid"></div>
+        <div class="catalog-top">
+          <button id="btnBack" class="btn-back" hidden>‹ All categories</button>
+          <h2 id="catalogTitle" class="catalog-title" hidden></h2>
+          <input id="search" class="search" autocomplete="off" spellcheck="false"
+                 placeholder="Type a product name, then Enter to add">
+        </div>
+        <div id="tileGrid" class="tile-grid"></div>
+        <div id="productGrid" class="product-grid" hidden></div>
       </div>
 
-      <aside class="sale">
-        <h2>Current sale</h2>
+      <aside class="receipt">
+        <div class="receipt-head"><span>Item</span><span>Qty</span><span>Price</span></div>
         <ul id="saleLines" class="sale-lines"></ul>
+        <div class="sums">
+          <div><span>Subtotal</span><b id="saleSubtotal">R 0.00</b></div>
+          <div><span>Specials discount</span><b id="saleDiscount">R 0.00</b></div>
+        </div>
         <div class="sale-total"><span>Total</span><strong id="saleTotal">R 0.00</strong></div>
         <div class="pay">
           <button id="btnCash" class="btn-pay pay-cash">Cash <kbd>F1</kbd></button>
@@ -43,7 +64,7 @@
         <button id="btnClear" class="btn-ghost">Clear sale <kbd>Esc</kbd></button>
         <div id="lastSale" class="last-sale"></div>
         <p class="hints">
-          <kbd>↑</kbd><kbd>↓</kbd> pick a line &nbsp; <kbd>+</kbd><kbd>−</kbd> change amount &nbsp; <kbd>Del</kbd> remove line
+          <kbd>↑</kbd><kbd>↓</kbd> pick a line · <kbd>+</kbd><kbd>−</kbd> amount · <kbd>Del</kbd> remove · <kbd>⌫</kbd> back to categories
         </p>
       </aside>
     </section>
@@ -119,7 +140,7 @@
           <label>Shop name <input id="setShopName" class="input"></label>
           <label>Tagline (under the name) <input id="setTagline" class="input"></label>
           <label>Slogan (bottom of the TV menu) <input id="setSlogan" class="input"></label>
-          <label class="check"><input id="setAutoStart" type="checkbox"> Start Bobbies POS when the PC switches on</label>
+          <label class="check"><input id="setAutoStart" type="checkbox"> Start the POS when the PC switches on</label>
           <button id="btnSaveGeneral" class="btn">Save</button>
         </div>
       </div>

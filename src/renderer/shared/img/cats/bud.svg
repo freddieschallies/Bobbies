@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
+  <!-- Cartoon buds next to a jar -->
+  <g stroke="#1a120b" stroke-width="5" stroke-linejoin="round">
+    <rect x="132" y="38" width="70" height="104" rx="18" fill="#cfeff7" fill-opacity="0.85"/>
+    <rect x="128" y="24" width="78" height="22" rx="6" fill="#4a3a2c"/>
+    <circle cx="152" cy="112" r="15" fill="#5cb83a"/><circle cx="178" cy="104" r="16" fill="#4aa830"/><circle cx="165" cy="86" r="14" fill="#6fd13c"/><circle cx="182" cy="126" r="12" fill="#5cb83a"/>
+    <path d="M26 128 C 14 104 24 76 46 66 C 50 46 76 38 92 52 C 112 46 130 64 124 86 C 138 104 128 132 104 138 C 88 152 54 152 26 128 Z" fill="#6fd13c"/>
+    <path d="M50 70 C 58 90 56 110 44 128 M96 56 C 92 80 98 104 112 120" fill="none" stroke="#3c9c2a" stroke-width="5"/>
+  </g>
+  <g fill="#ff8c1a">
+    <circle cx="56" cy="84" r="5"/><circle cx="86" cy="62" r="4"/><circle cx="110" cy="98" r="5"/><circle cx="62" cy="132" r="4"/><circle cx="96" cy="128" r="5"/><circle cx="40" cy="106" r="4"/>
+  </g>
+  <g fill="#fff" opacity="0.8"><circle cx="72" cy="100" r="3"/><circle cx="92" cy="92" r="2.5"/><circle cx="50" cy="96" r="2.5"/><circle cx="84" cy="114" r="3"/></g>
+  <path d="M146 50 L 146 130" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+</svg>

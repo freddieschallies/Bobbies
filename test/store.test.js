@@ -61,3 +61,15 @@ test('category in use cannot be deleted; reorder works', () => {
   s.moveCategory(pre.id, -1);
   assert.strictEqual(s.publicState().categories[0].name, 'Pre-rolls');
 });
+
+test('specials sell at the special price and record the discount', () => {
+  const s = freshStore();
+  const p = s.saveProduct({ name: 'Gelato', categoryId: s.data.categories[0].id, unit: 'g', weighed: true, price: 15000, specialPrice: 12000, stock: 10 });
+  assert.throws(() => s.saveProduct({ ...p, specialPrice: 15000 }), /lower/);
+  const sale = s.completeSale({ lines: [{ productId: p.id, qty: 2 }], method: 'card' });
+  assert.strictEqual(sale.total, 24000);
+  assert.strictEqual(sale.subtotal, 30000);
+  assert.strictEqual(sale.discount, 6000);
+  s.saveProduct({ ...p, specialPrice: '' });
+  assert.strictEqual(s.data.products[0].specialPrice, null);
+});

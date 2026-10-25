@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170">
+  <!-- Price tag sticker with a leaf -->
+  <g stroke="#1a120b" stroke-width="5" stroke-linejoin="round">
+    <path d="M110 10 L 128 30 L 154 22 L 158 48 L 184 56 L 170 78 L 186 100 L 160 106 L 156 132 L 130 124 L 112 144 L 96 122 L 70 128 L 68 102 L 42 94 L 58 72 L 44 50 L 70 46 L 76 20 L 100 30 Z" fill="#ffd23f"/>
+    <path d="M70 70 L 150 50 L 166 96 L 86 116 Z" fill="#e5484d" transform="rotate(-4 118 83)"/>
+    <circle cx="82" cy="84" r="7" fill="#fffaf0"/>
+  </g>
+  <text x="124" y="96" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="36" font-weight="900" fill="#fff" stroke="#1a120b" stroke-width="3" paint-order="stroke" transform="rotate(-14 124 84)">DEAL</text>
+  <g transform="translate(180 150) scale(0.22)" fill="#4cc74a" stroke="#123d14" stroke-width="16">
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z"/>
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z" transform="rotate(-50) scale(0.8)"/>
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z" transform="rotate(50) scale(0.8)"/>
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z" transform="rotate(-80) scale(0.55)"/>
+    <path d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z" transform="rotate(80) scale(0.55)"/>
+  </g>
+</svg>

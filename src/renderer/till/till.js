@@ -85,7 +85,8 @@ const confirmBox = (title, text, okText = 'Yes') =>
 // ---------------------------------------------------------------- views
 function setView(v) {
   view = v;
-  document.querySelectorAll('.view-btn').forEach((b) => b.classList.toggle('active', b.dataset.view === v));
+  $('viewToggle').innerHTML = v === 'sell' ? 'Settings <kbd>F10</kbd>' : 'Back to selling <kbd>F10</kbd>';
+  $('viewToggle').classList.toggle('on', v === 'settings');
   $('view-sell').hidden = v !== 'sell';
   $('view-settings').hidden = v !== 'settings';
   if (v === 'sell') focusSearch();
@@ -108,18 +109,69 @@ function focusSearch() {
 }
 
 // ---------------------------------------------------------------- sell: catalog
+const SPECIALS = '__specials';
+const hasSpecial = (p) => p.specialPrice !== null && p.specialPrice !== undefined && p.specialPrice < p.price;
+const priceOf = (p) => (hasSpecial(p) ? p.specialPrice : p.price);
+
+// Pick a cartoon picture for a category from its name.
+function catPic(name) {
+  const n = String(name).toLowerCase();
+  if (/bud|flower|weed|strain|herb/.test(n)) return 'bud';
+  if (/pre.?roll|joint|blunt|spliff/.test(n)) return 'prerolls';
+  if (/edible|gumm|candy|sweet|brownie|cookie|choc|snack/.test(n)) return 'edibles';
+  if (/oil|tinct|vape|cart|drop/.test(n)) return 'oils';
+  if (/access|grind|paper|pipe|bong|lighter|merch|gear/.test(n)) return 'accessories';
+  if (/special|deal|promo/.test(n)) return 'specials';
+  return 'other';
+}
+const picUrl = (key) => `../shared/img/cats/${key}.svg`;
+
 function visibleProducts() {
   const q = $('search').value.trim().toLowerCase();
   let list = state.products.filter((p) => p.active);
   if (q) list = list.filter((p) => p.name.toLowerCase().includes(q));
+  else if (activeCat === SPECIALS) list = list.filter(hasSpecial);
   else list = list.filter((p) => p.categoryId === activeCat);
   return list.sort((a, b) => (b.stock > 0) - (a.stock > 0) || a.name.localeCompare(b.name));
 }
 
-function renderCatTabs() {
-  const searching = $('search').value.trim() !== '';
-  $('catTabs').innerHTML = state.categories.map((c) =>
-    `<button class="cat-tab ${catClass(c.id)} ${!searching && c.id === activeCat ? 'active' : ''}" data-cat="${c.id}">${esc(c.name)}</button>`).join('');
+function renderCatalog() {
+  const q = $('search').value.trim();
+  const home = !q && !activeCat;
+  $('tileGrid').hidden = !home;
+  $('productGrid').hidden = home;
+  $('btnBack').hidden = home;
+  const title = $('catalogTitle');
+  title.hidden = home || Boolean(q);
+  if (!title.hidden) {
+    const special = activeCat === SPECIALS;
+    title.textContent = special ? 'Specials' : catName(activeCat);
+    title.className = `catalog-title ${special ? '' : catClass(activeCat)}`;
+    title.style.setProperty('--cat', special ? '#ff4fa3' : '');
+  }
+  $('search').placeholder = home ? 'Type a product name, then Enter to add' : 'Search all products';
+  if (home) renderTiles();
+  else renderGrid();
+}
+
+function renderTiles() {
+  const inStock = (list) => list.filter((p) => p.active && p.stock > 0).length;
+  const tiles = [];
+  const specials = state.products.filter((p) => p.active && hasSpecial(p));
+  if (specials.length) {
+    tiles.push(`<button class="tile specials" data-cat="${SPECIALS}">
+      <span class="t-count">${inStock(specials)} deals</span>
+      <img src="${picUrl('specials')}" alt="">
+      <span class="t-name">Specials</span><span class="t-go">›</span></button>`);
+  }
+  state.categories.forEach((c) => {
+    const n = inStock(state.products.filter((p) => p.categoryId === c.id));
+    tiles.push(`<button class="tile ${catClass(c.id)}" data-cat="${c.id}">
+      <span class="t-count">${n} item${n === 1 ? '' : 's'}</span>
+      <img src="${picUrl(catPic(c.name))}" alt="">
+      <span class="t-name">${esc(c.name)}</span><span class="t-go">›</span></button>`);
+  });
+  $('tileGrid').innerHTML = tiles.join('') || '<div class="empty">Add categories under Settings → Categories.</div>';
 }
 
 function renderGrid() {
@@ -130,20 +182,41 @@ function renderGrid() {
   if (!list.length) {
     $('productGrid').innerHTML = `<div class="empty">${$('search').value.trim()
       ? 'No products match.'
-      : 'No products in this category yet — add them under Settings → Products &amp; stock.'}</div>`;
+      : 'Nothing here yet. Add products under Settings → Products &amp; stock.'}</div>`;
     return;
   }
   $('productGrid').innerHTML = list.map((p) => {
     const low = fmt.isLow(p);
     const out = p.stock <= 0;
-    return `<button class="product ${catClass(p.categoryId)} ${out ? 'out' : ''} ${p.id === hiId ? 'highlight' : ''}" data-id="${p.id}" ${out ? 'disabled' : ''}>
+    const pic = picUrl(catPic(catName(p.categoryId)));
+    const priceHTML = hasSpecial(p)
+      ? `<s>${money(p.price)}</s>${money(p.specialPrice)} / ${esc(p.unit)}`
+      : esc(fmt.perUnit(p));
+    return `<button class="product ${catClass(p.categoryId)} ${out ? 'out' : ''} ${p.id === hiId ? 'highlight' : ''}" style="--pic:url('${pic}')" data-id="${p.id}" ${out ? 'disabled' : ''}>
+      ${hasSpecial(p) ? '<span class="deal">Special</span>' : ''}
       <span class="p-name">${esc(p.name)}</span>
-      <span class="p-price">${esc(fmt.perUnit(p))}</span>
+      <span class="p-price">${priceHTML}</span>
       <span class="p-stock ${low ? 'low' : ''}">${out ? 'Out of stock' : `${esc(fmt.qty(p.stock, p.unit))} left${low ? ' · low' : ''}`}</span>
     </button>`;
   }).join('');
   const hi = $('productGrid').querySelector('.highlight');
   if (hi) hi.scrollIntoView({ block: 'nearest' });
+}
+
+function openCategory(id) {
+  activeCat = id;
+  $('search').value = '';
+  highlight = 0;
+  renderCatalog();
+  focusSearch();
+}
+
+function goHome() {
+  activeCat = null;
+  $('search').value = '';
+  highlight = 0;
+  renderCatalog();
+  focusSearch();
 }
 
 // ---------------------------------------------------------------- sell: sale
@@ -153,6 +226,10 @@ function inSale(productId) {
 
 function lineTotal(l) {
   const p = product(l.productId);
+  return p ? Math.round(priceOf(p) * l.qty) : 0;
+}
+function lineFull(l) {
+  const p = product(l.productId);
   return p ? Math.round(p.price * l.qty) : 0;
 }
 
@@ -161,20 +238,23 @@ function saleChanged() {
   if (selectedLine >= sale.length) selectedLine = sale.length - 1;
   pos.setSaleActive(sale.length > 0);
   renderSale();
-  renderGrid();
+  renderCatalog();
 }
 
 function renderSale() {
   $('saleLines').innerHTML = sale.map((l, i) => {
     const p = product(l.productId);
+    const each = hasSpecial(p) ? `${money(p.specialPrice)} each · special` : `${money(p.price)} each`;
     return `<li class="sale-line ${i === selectedLine ? 'selected' : ''}" data-i="${i}">
-      <span class="l-name">${esc(p.name)}</span>
+      <span class="l-name">${esc(p.name)}<small>${each}<button class="l-remove" data-remove="${i}" title="Remove">✕</button></small></span>
+      <span class="l-qty">${esc(fmt.qty(l.qty, p.unit))}</span>
       <span class="l-total">${money(lineTotal(l))}</span>
-      <span class="l-qty">${esc(fmt.qty(l.qty, p.unit))} × ${money(p.price)}
-        <button class="l-remove" data-remove="${i}" title="Remove">✕</button></span>
     </li>`;
   }).join('') || '<li class="empty">Nothing on the sale yet.</li>';
   const total = sale.reduce((s, l) => s + lineTotal(l), 0);
+  const full = sale.reduce((s, l) => s + lineFull(l), 0);
+  $('saleSubtotal').textContent = money(full);
+  $('saleDiscount').textContent = full > total ? `− ${money(full - total)}` : money(0);
   $('saleTotal').textContent = money(total);
   $('btnCash').disabled = $('btnCard').disabled = sale.length === 0;
   const sel = $('saleLines').querySelector('.selected');
@@ -195,7 +275,7 @@ async function askQty(p, current) {
       const inp = b.querySelector('#qtyIn');
       const upd = () => {
         const q = fmt.num(inp.value);
-        b.querySelector('#qtyPrice').innerHTML = q > 0 ? `= <strong>${money(Math.round(p.price * q))}</strong>` : '&nbsp;';
+        b.querySelector('#qtyPrice').innerHTML = q > 0 ? `= <strong>${money(Math.round(priceOf(p) * q))}</strong>` : '&nbsp;';
       };
       inp.addEventListener('input', upd);
       upd();
@@ -230,7 +310,6 @@ async function addToSale(p) {
   }
   $('search').value = '';
   highlight = 0;
-  renderCatTabs();
   saleChanged();
   focusSearch();
 }
@@ -343,7 +422,7 @@ function renderProductRows() {
     return `<tr>
       <td><strong>${esc(p.name)}</strong></td>
       <td>${esc(catName(p.categoryId))}</td>
-      <td>${esc(fmt.perUnit(p))}</td>
+      <td>${hasSpecial(p) ? `<s>${money(p.price)}</s> ${money(p.specialPrice)} / ${esc(p.unit)} <span class="tag special">Special</span>` : esc(fmt.perUnit(p))}</td>
       <td>${esc(fmt.qty(p.stock, p.unit))} ${tag}</td>
       <td>${esc(fmt.qty(p.lowStock, p.unit))}</td>
       <td>${p.active ? 'Yes' : 'Hidden'}</td>
@@ -358,7 +437,8 @@ function renderProductRows() {
 async function productForm(p) {
   if (!state.categories.length) { toast('Add a category first.', true); return; }
   const isNew = !p;
-  p = p || { name: '', categoryId: activeCat || state.categories[0].id, unit: 'g', weighed: true, price: 0, lowStock: 5, stock: 0, active: true, description: '' };
+  const startCat = activeCat && activeCat !== SPECIALS ? activeCat : state.categories[0].id;
+  p = p || { name: '', categoryId: startCat, specialPrice: null, unit: 'g', weighed: true, price: 0, lowStock: 5, stock: 0, active: true, description: '' };
   await openModal({
     title: isNew ? 'Add product' : `Edit ${p.name}`,
     okText: 'Save',
@@ -373,8 +453,9 @@ async function productForm(p) {
       <label class="check"><input name="weighed" type="checkbox" ${p.weighed ? 'checked' : ''}> Sold by weight (ask for grams at the till)</label>
       <div class="row">
         <label>Price per unit (R) <input name="price" class="input" inputmode="decimal" value="${(p.price / 100).toFixed(2)}"></label>
-        <label>Show “low stock” at <input name="lowStock" class="input" inputmode="decimal" value="${p.lowStock}"></label>
+        <label>Special price (R) — leave empty for none <input name="specialPrice" class="input" inputmode="decimal" value="${hasSpecial(p) ? (p.specialPrice / 100).toFixed(2) : ''}" placeholder="No special"></label>
       </div>
+      <label>Show “low stock” at <input name="lowStock" class="input" inputmode="decimal" value="${p.lowStock}"></label>
       ${isNew ? `<label>Opening stock <input name="stock" class="input" inputmode="decimal" value="0"></label>` : ''}
       <label>Short description for the menu (optional) <input name="description" class="input" value="${esc(p.description || '')}"></label>
       <label class="check"><input name="active" type="checkbox" ${p.active ? 'checked' : ''}> Show on the menu and till</label>
@@ -389,6 +470,9 @@ async function productForm(p) {
       const v = (n) => b.querySelector(`[name=${n}]`);
       const price = fmt.toCents(v('price').value);
       if (!Number.isFinite(price)) throw new Error('Enter a valid price.');
+      const specialRaw = v('specialPrice').value.trim();
+      const specialPrice = specialRaw === '' ? null : fmt.toCents(specialRaw);
+      if (specialRaw !== '' && !Number.isFinite(specialPrice)) throw new Error('Enter a valid special price, or leave it empty.');
       const lowStock = fmt.num(v('lowStock').value || 0);
       if (!Number.isFinite(lowStock)) throw new Error('Enter a valid low-stock level.');
       const data = {
@@ -398,6 +482,7 @@ async function productForm(p) {
         unit: v('unit').value,
         weighed: v('weighed').checked,
         price,
+        specialPrice,
         lowStock,
         active: v('active').checked,
         description: v('description').value,
@@ -474,6 +559,7 @@ async function renderCashup() {
         <div class="stat"><span>Cash (${r.byMethod.cash.count} sales)</span><strong>${money(r.byMethod.cash.total)}</strong></div>
         <div class="stat"><span>Card (${r.byMethod.card.count} sales)</span><strong>${money(r.byMethod.card.total)}</strong></div>
         <div class="stat"><span>Number of sales</span><strong>${r.count}</strong></div>
+        <div class="stat"><span>Specials discount given</span><strong>${money(r.discount || 0)}</strong></div>
       </div>
       <h3>Sold today</h3>
       <table class="table"><thead><tr><th>Product</th><th>Amount</th><th>Takings</th></tr></thead><tbody>
@@ -501,11 +587,11 @@ function fillGeneral() {
 // ---------------------------------------------------------------- state
 function applyState(s) {
   state = s;
-  if (!state.categories.some((c) => c.id === activeCat)) activeCat = state.categories[0] ? state.categories[0].id : null;
+  if (activeCat && activeCat !== SPECIALS && !state.categories.some((c) => c.id === activeCat)) activeCat = null;
+  if (activeCat === SPECIALS && !state.products.some(hasSpecial)) activeCat = null;
   $('shopName').innerHTML = brandHTML(state.settings.shopName);
   $('shopTag').textContent = state.settings.tagline || '';
   document.title = `${state.settings.shopName} POS`;
-  renderCatTabs();
   saleChanged();
   if (view === 'settings') {
     if (panel === 'products') renderProductRows();
@@ -516,27 +602,23 @@ function applyState(s) {
 
 // ---------------------------------------------------------------- events
 function wire() {
-  document.querySelectorAll('.view-btn').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view)));
+  $('viewToggle').addEventListener('click', () => setView(view === 'sell' ? 'settings' : 'sell'));
   document.querySelectorAll('.sub-btn').forEach((b) => b.addEventListener('click', () => setPanel(b.dataset.panel)));
 
   // catalog
-  $('catTabs').addEventListener('click', (e) => {
+  $('tileGrid').addEventListener('click', (e) => {
     const b = e.target.closest('[data-cat]');
-    if (!b) return;
-    activeCat = b.dataset.cat;
-    $('search').value = '';
-    highlight = 0;
-    renderCatTabs();
-    renderGrid();
-    focusSearch();
+    if (b) openCategory(b.dataset.cat);
   });
+  $('btnBack').addEventListener('click', goHome);
   $('productGrid').addEventListener('click', (e) => {
     const b = e.target.closest('[data-id]');
     if (b) addToSale(product(b.dataset.id));
   });
-  $('search').addEventListener('input', () => { highlight = 0; renderCatTabs(); renderGrid(); });
+  $('search').addEventListener('input', () => { highlight = 0; renderCatalog(); });
   $('search').addEventListener('keydown', (e) => {
     const q = $('search').value.trim();
+    if (e.key === 'Backspace' && $('search').value === '' && activeCat) { e.preventDefault(); goHome(); return; }
     if (e.key === 'Enter') {
       e.preventDefault();
       const sellable = visibleProducts().filter((p) => p.stock > 0);
@@ -660,7 +742,7 @@ function wire() {
     if (e.key === 'F2') { e.preventDefault(); payCard(); return; }
     if (e.key === 'Escape') {
       e.preventDefault();
-      if (!searchEmpty) { $('search').value = ''; highlight = 0; renderCatTabs(); renderGrid(); } else clearSale();
+      if (!searchEmpty) { $('search').value = ''; highlight = 0; renderCatalog(); } else clearSale();
       return;
     }
     if (searchEmpty && sale.length) {
@@ -678,14 +760,45 @@ function wire() {
     if (!inSearch && e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) focusSearch();
   });
 
-  setInterval(() => {
-    $('clock').textContent = new Date().toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' });
-  }, 1000);
+  const tick = () => {
+    const now = new Date();
+    $('clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    $('date').textContent = now.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
+  };
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ---------------------------------------------------------------- mini TV
+// A small live copy of the TV: the menu page in "mirror" mode. It follows the
+// real TV (same menu, same video at the same moment) but never plays on its own.
+function mountMiniTv() {
+  const W = 1600;
+  const H = 900;
+  const box = $('tvFrame');
+  const f = document.createElement('iframe');
+  f.src = '../menu/index.html?mirror=1';
+  f.title = 'What the TV is showing';
+  f.tabIndex = -1;
+  f.width = W;
+  f.height = H;
+  f.style.width = `${W}px`;
+  f.style.height = `${H}px`;
+  box.appendChild(f);
+  const fit = () => { f.style.transform = `scale(${box.clientWidth / W})`; };
+  new ResizeObserver(fit).observe(box);
+  fit();
+  const label = (s) => {
+    $('tvLabel').textContent = s && s.playing ? `On the TV now: ${String(s.name || 'video').replace(/\.[a-z0-9]+$/i, '')}` : 'On the TV now: menu';
+  };
+  pos.onTvStatus(label);
+  pos.getTvStatus().then(label);
 }
 
 // ---------------------------------------------------------------- start
 (async function start() {
   wire();
+  mountMiniTv();
   pos.onState(applyState);
   applyState(await pos.getState());
   pos.setSaleActive(false);

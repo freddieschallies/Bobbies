@@ -135,6 +135,8 @@ body { color: var(--ink); font-family: var(--font-body); font-weight: 800; }
   transform: rotate(-4deg);
   vertical-align: middle;
 }
+.badge.special { background: #ff4fa3; transform: rotate(3deg); }
+.item .price s { color: var(--ink-soft); font-size: 0.7em; margin-right: 0.3em; text-decoration-thickness: 0.12em; }
 .item.changed { animation: flash 2.4s ease-out; }
 @keyframes flash {
   0% { background: rgba(255, 210, 63, 0.7); }

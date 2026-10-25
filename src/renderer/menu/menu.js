@@ -2,6 +2,14 @@
 /* global fmt, pos */
 // Bobbies POS — customer menu screen (the TV).
 
+// The till shows a small live copy of this screen ("mirror" mode). The copy
+// borrows the till's connection and follows the real TV instead of choosing
+// its own videos.
+const MIRROR = new URLSearchParams(location.search).has('mirror');
+if (MIRROR && !window.pos) {
+  try { window.pos = window.parent.pos; } catch (e) { /* not inside the till */ }
+}
+
 const $ = (id) => document.getElementById(id);
 const { money, esc } = fmt;
 
@@ -43,12 +51,13 @@ function renderBoard() {
       <div class="items">
       ${g.items.map((p) => {
         const low = fmt.isLow(p);
-        const key = `${p.price}|${low}`;
+        const special = p.specialPrice !== null && p.specialPrice !== undefined && p.specialPrice < p.price;
+        const key = `${p.price}|${p.specialPrice}|${low}`;
         seen.set(p.id, key);
         const changed = lastSeen.size && lastSeen.get(p.id) !== key;
         return `<div class="item ${changed ? 'changed' : ''}">
-          <span class="name">${esc(p.name)}${low ? '<span class="badge">Low stock</span>' : ''}</span>
-          <span class="price">${money(p.price)} <span class="unit">/ ${esc(p.unit)}</span></span>
+          <span class="name">${esc(p.name)}${special ? '<span class="badge special">Special</span>' : ''}${low ? '<span class="badge">Low stock</span>' : ''}</span>
+          <span class="price">${special ? `<s>${money(p.price)}</s>${money(p.specialPrice)}` : money(p.price)} <span class="unit">/ ${esc(p.unit)}</span></span>
           ${p.description ? `<span class="desc">${esc(p.description)}</span>` : ''}
         </div>`;
       }).join('')}
@@ -165,12 +174,18 @@ function drawBlur() {
     : requestAnimationFrame(drawBlur);
 }
 
-function play(v) {
+function play(v, startAt) {
   playing = true;
   lastPlayedId = v.id;
-  vid.muted = !state.settings.videoSound;
+  vid.muted = MIRROR || !state.settings.videoSound;
   vid.src = pos.videoUrl(v.file);
+  if (!MIRROR) pos.sendTvStatus({ playing: true, id: v.id, file: v.file, name: v.name, at: Date.now() });
   vid.onloadedmetadata = () => {
+    // The mini TV joins a video already playing: jump to the same moment.
+    if (startAt) {
+      const offset = (Date.now() - startAt) / 1000;
+      if (offset > 0 && offset < vid.duration) vid.currentTime = offset;
+    }
     const screenAspect = stageAspect();
     const videoAspect = vid.videoWidth / vid.videoHeight;
     // Same shape as the stage (within 4%)? Fill edge to edge. Otherwise (vertical,
@@ -199,7 +214,20 @@ function stop() {
     vid.removeAttribute('src');
     vid.load();
   }, 650);  // let the fade finish
+  if (MIRROR) return;
+  pos.sendTvStatus({ playing: false });
   scheduleNext();
+}
+
+// Mirror mode: copy whatever the real TV is doing.
+function followTv(s) {
+  if (s && s.playing) {
+    if (playing && lastPlayedId === s.id) return;
+    if (playing) { playing = false; layer.classList.remove('on'); }
+    play({ id: s.id, file: s.file, name: s.name }, s.at);
+  } else if (playing) {
+    stop();
+  }
 }
 
 // ================================================================ wiring
@@ -207,18 +235,20 @@ pos.onState((s) => {
   const timingChanged = s.settings.videoIntervalMin !== state.settings.videoIntervalMin;
   state = s;
   renderBoard();
+  if (MIRROR) return;
   if (playing && !enabledVideos().length) stop();
   if (timingChanged && !playing) scheduleNext();
 });
 
-pos.onSaleActive((active) => {
+if (MIRROR) pos.onTvStatus(followTv);
+else pos.onSaleActive((active) => {
   const was = saleActive;
   saleActive = active;
   if (active && playing) stop();          // customer started ordering: back to the menu now
   if (was && !active) lastSaleEnd = Date.now();
 });
 
-pos.onTestVideo(() => {
+if (!MIRROR) pos.onTestVideo(() => {
   if (playing || saleActive) return;
   const v = nextVideo();
   if (v) { clearTimeout(timer); play(v); }
@@ -233,5 +263,6 @@ window.addEventListener('resize', () => { fitBoard(); sizeCanvas(); });
   renderBoard();
   tickClock();
   setInterval(tickClock, 1000 * 15);
-  scheduleNext();
+  if (MIRROR) followTv(await pos.getTvStatus());
+  else { pos.sendTvStatus({ playing: false }); scheduleNext(); }
 })();

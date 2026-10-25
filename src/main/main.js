@@ -33,6 +33,7 @@ let videosDir;
 let tillWin = null;
 let menuWin = null;
 let saleActive = false;
+let tvStatus = { playing: false };
 
 // Only these store methods may be called from the till screen.
 const STORE_METHODS = new Set([
@@ -231,6 +232,13 @@ function registerIpc() {
   ipcMain.handle('sale-active:get', () => saleActive);
 
   ipcMain.on('video:test', () => sendToMenu('video:test'));
+
+  // The TV tells us when a video starts or stops; the till's mini TV follows it.
+  ipcMain.on('tv-status', (_e, s) => {
+    tvStatus = s && typeof s === 'object' ? s : { playing: false };
+    if (tillWin && !tillWin.isDestroyed()) tillWin.webContents.send('tv-status', tvStatus);
+  });
+  ipcMain.handle('tv-status:get', () => tvStatus);
   ipcMain.handle('menu:place', () => { placeMenu(); return { ok: true, hasSecond: Boolean(secondDisplay()) }; });
   ipcMain.handle('menu:reload', () => { if (menuWin) menuWin.reload(); return { ok: true }; });
 }
