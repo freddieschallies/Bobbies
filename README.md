@@ -1,6 +1,7 @@
-# Bobbies POS
+# BGF420 Clubhouse POS
 
-Point of sale for the shop, with a live menu on the TV.
+Point of sale for the BGF420 Clubhouse, Richards Bay, with a live menu on the TV.
+Richards Bay beach-cartoon theme starring Bobby G.
 
 One Windows PC runs everything. The till is on the main monitor; the menu
 opens borderless and full screen on the second HDMI output (the TV, via the
@@ -22,7 +23,7 @@ on the till.
 - Categories — add, rename, reorder, delete
 - Main screen & videos — upload promo videos, set how often they play, sound on/off
 - Cash-up — daily totals split cash/card, what sold, every sale, printable
-- General — shop name, start automatically when the PC switches on
+- General — shop name, tagline, TV slogan, start automatically when the PC switches on
 
 **Menu (TV)**
 - Shows only what's in stock, grouped by category, with price per unit
@@ -56,7 +57,7 @@ The installer lands in the `dist` folder.
 
 ## Where the data lives
 
-`%APPDATA%\Bobbies POS\bobbies-data.json` (products, sales, settings) and the
+`%APPDATA%\BGF420 Clubhouse POS\bobbies-data.json` (products, sales, settings) and the
 `videos` folder next to it. Back up that folder to keep everything.
 
 ## Developing
@@ -64,6 +65,12 @@ The installer lands in the `dist` folder.
 - `npm test` runs the stock/sales tests (no Electron needed)
 - `src/main/` — Electron main process, data store, preload bridge
 - `src/renderer/till/` — operator screen
-- `src/renderer/menu/` — TV menu (colours and fonts are variables at the top of `menu.css`)
+- `src/renderer/menu/` — TV menu
+- `src/renderer/shared/theme.css` — the beach-cartoon theme: colours, fonts, category colours
+- `src/renderer/shared/img/` — Bobby's caricature (`bobby.jpg`), beach scene, thatch and leaf art.
+  Swap `bobby.jpg` for a new picture to change the character.
 
-Still to do: pick the card machine, and design the TV visuals in detail.
+On the TV the theme (sign, thatch, Bobby, sand) always stays on screen as a frame;
+the menu and the videos take turns in the middle panel.
+
+Still to do: pick the card machine.

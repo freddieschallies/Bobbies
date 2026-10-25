@@ -21,7 +21,9 @@ function defaultData() {
     stockLog: [],
     videos: [],
     settings: {
-      shopName: 'Bobbies',
+      shopName: 'BGF420 Clubhouse',
+      tagline: 'Come chill with us · Est. 2023',
+      slogan: 'Island party vibe · Richards Bay',
       videoIntervalMin: 5,   // minutes of menu between videos
       resumeDelaySec: 20,    // quiet time after a sale before videos may play again
       videoSound: false,
@@ -277,7 +279,9 @@ class Store {
   // ---------- settings ----------
   updateSettings(patch) {
     const s = this.data.settings;
-    if ('shopName' in patch) s.shopName = String(patch.shopName || '').trim() || 'Bobbies';
+    if ('shopName' in patch) s.shopName = String(patch.shopName || '').trim() || 'BGF420 Clubhouse';
+    if ('tagline' in patch) s.tagline = String(patch.tagline || '').trim();
+    if ('slogan' in patch) s.slogan = String(patch.slogan || '').trim();
     if ('videoIntervalMin' in patch) s.videoIntervalMin = clamp(Number(patch.videoIntervalMin), 1, 120);
     if ('resumeDelaySec' in patch) s.resumeDelaySec = clamp(Number(patch.resumeDelaySec), 0, 600);
     if ('videoSound' in patch) s.videoSound = Boolean(patch.videoSound);

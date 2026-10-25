@@ -64,7 +64,7 @@ function createTill() {
     y: workArea.y,
     width: workArea.width,
     height: workArea.height,
-    title: 'Bobbies POS',
+    title: 'BGF420 Clubhouse POS',
     backgroundColor: '#14171a',
     show: false,
     webPreferences: {
@@ -85,7 +85,7 @@ function createTill() {
 
 function createMenu() {
   menuWin = new BrowserWindow({
-    title: 'Bobbies Menu',
+    title: 'BGF420 Clubhouse Menu',
     frame: false,
     backgroundColor: '#0b0d0c',
     show: false,

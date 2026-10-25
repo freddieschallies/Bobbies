@@ -2,24 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; media-src media:; img-src 'self' data:">
-  <title>Bobbies Menu</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; media-src media:; img-src 'self' data:; font-src 'self'">
+  <title>BGF420 Clubhouse Menu</title>
+  <link rel="stylesheet" href="../shared/theme.css">
   <link rel="stylesheet" href="menu.css">
 </head>
-<body>
-  <div id="menu" class="menu">
+<body class="beach-bg">
+  <!-- The themed frame (header, side, footer) always stays on screen.
+       Only the stage in the middle swaps between the menu and a video. -->
+  <div class="frame">
     <header class="menu-head">
-      <h1 id="shopName">Bobbies</h1>
-      <div id="clock" class="clock"></div>
+      <div class="brand">
+        <div class="toon-script bobby-g">Bobby G's</div>
+        <h1 class="toon-title brand-name" id="shopName">BGF420 <span class="white">Clubhouse</span></h1>
+        <div class="toon-script brand-tag" id="shopTag"></div>
+      </div>
+      <div class="head-right">
+        <div class="toon-script place">Richards Bay<br><span>Zululand</span></div>
+        <div class="clock-badge"><div id="date"></div><div id="clock" class="clock"></div></div>
+      </div>
     </header>
-    <main id="board" class="board"></main>
-  </div>
+    <div class="thatch"></div>
 
-  <!-- Video takeover. The canvas is a blurred, stretched copy of the video so
-       vertical or odd-shaped clips never leave black bars. -->
-  <div id="videoLayer" class="video-layer">
-    <canvas id="blurBg" class="blur-bg" width="96" height="54"></canvas>
-    <video id="vid" class="vid" playsinline preload="auto"></video>
+    <div class="body">
+      <aside class="side">
+        <div class="mascot side-mascot" aria-hidden="true"></div>
+        <div class="toon-script side-line">Come chill<br>with us!</div>
+        <img class="side-leaf" src="../shared/img/leaf.svg" alt="">
+      </aside>
+
+      <section class="stage" id="stage">
+        <main id="board" class="board"></main>
+        <div id="videoLayer" class="video-layer">
+          <canvas id="blurBg" class="blur-bg" width="96" height="54"></canvas>
+          <video id="vid" class="vid" playsinline preload="auto"></video>
+        </div>
+      </section>
+    </div>
+
+    <footer class="menu-foot">
+      <img src="../shared/img/leaf.svg" alt="">
+      <span class="toon-script" id="slogan"></span>
+      <img src="../shared/img/leaf.svg" alt="">
+    </footer>
   </div>
 
   <script src="../shared/format.js"></script>

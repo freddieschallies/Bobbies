@@ -9,10 +9,21 @@ let state = { categories: [], products: [], videos: [], settings: {} };
 let lastSeen = new Map();   // productId -> "price|low" to flash changed rows
 
 // ================================================================ menu board
+// "BGF420 Clubhouse" -> green "BGF420" + white "Clubhouse"
+function brandHTML(name) {
+  const words = String(name || '').trim().split(/\s+/);
+  if (words.length < 2) return esc(name);
+  const last = words.pop();
+  return `${esc(words.join(' '))} <span class="white">${esc(last)}</span>`;
+}
+
 function renderBoard() {
-  $('shopName').textContent = state.settings.shopName || 'Menu';
+  $('shopName').innerHTML = brandHTML(state.settings.shopName || 'Menu');
+  $('shopTag').textContent = state.settings.tagline || '';
+  $('slogan').textContent = state.settings.slogan || '';
   const groups = state.categories
-    .map((c) => ({
+    .map((c, i) => ({
+      color: i % 6,
       cat: c,
       items: state.products
         .filter((p) => p.categoryId === c.id && p.active && p.stock > 0)
@@ -27,8 +38,9 @@ function renderBoard() {
 
   const seen = new Map();
   $('board').innerHTML = groups.map((g) => `
-    <section class="cat">
-      <h2>${esc(g.cat.name)}</h2>
+    <section class="cat cat-c${g.color}">
+      <h2><img src="../shared/img/leaf.svg" alt="">${esc(g.cat.name)}</h2>
+      <div class="items">
       ${g.items.map((p) => {
         const low = fmt.isLow(p);
         const key = `${p.price}|${low}`;
@@ -40,28 +52,30 @@ function renderBoard() {
           ${p.description ? `<span class="desc">${esc(p.description)}</span>` : ''}
         </div>`;
       }).join('')}
+      </div>
     </section>`).join('');
   lastSeen = seen;
   fitBoard();
 }
 
-// Spread the menu over columns, then shrink the text until it all fits.
+// Spread the menu over columns, then shrink the text until it all fits the stage.
 function fitBoard() {
-  const root = document.documentElement;
   const board = $('board');
-  const aspect = window.innerWidth / window.innerHeight;
-  board.style.columnCount = aspect > 1.4 ? 3 : aspect > 0.9 ? 2 : 1;
-  const max = Math.max(16, Math.round(window.innerHeight / 34));
-  let size = max;
-  root.style.fontSize = `${size}px`;
-  while (size > 10 && (board.scrollWidth > board.clientWidth + 2 || board.scrollHeight > board.clientHeight + 2)) {
+  const stage = $('stage');
+  const aspect = stage.clientWidth / Math.max(1, stage.clientHeight);
+  board.style.columnCount = aspect > 1.45 ? 3 : aspect > 0.85 ? 2 : 1;
+  let size = Math.max(14, Math.round(stage.clientHeight / 27));
+  board.style.fontSize = `${size}px`;
+  while (size > 9 && (board.scrollWidth > board.clientWidth + 2 || board.scrollHeight > board.clientHeight + 2)) {
     size -= 1;
-    root.style.fontSize = `${size}px`;
+    board.style.fontSize = `${size}px`;
   }
 }
 
 function tickClock() {
-  $('clock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const now = new Date();
+  $('clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  $('date').textContent = now.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
 // ================================================================ videos
@@ -124,10 +138,13 @@ function nextVideo() {
   return list.find((v) => v.id === id);
 }
 
+// Videos play inside the stage, so shapes are measured against the stage, not the whole TV.
+const stageAspect = () => $('stage').clientWidth / Math.max(1, $('stage').clientHeight);
+
 function sizeCanvas() {
   const w = 96;
   canvas.width = w;
-  canvas.height = Math.max(1, Math.round((w * window.innerHeight) / window.innerWidth));
+  canvas.height = Math.max(1, Math.round(w / stageAspect()));
 }
 
 // Draw the current frame "cover"-style into the small canvas; CSS blurs and stretches it.
@@ -154,9 +171,9 @@ function play(v) {
   vid.muted = !state.settings.videoSound;
   vid.src = `media://v/${encodeURIComponent(v.file)}`;
   vid.onloadedmetadata = () => {
-    const screenAspect = window.innerWidth / window.innerHeight;
+    const screenAspect = stageAspect();
     const videoAspect = vid.videoWidth / vid.videoHeight;
-    // Same shape as the TV (within 4%)? Fill edge to edge. Otherwise (vertical,
+    // Same shape as the stage (within 4%)? Fill edge to edge. Otherwise (vertical,
     // square, 4:3...) show the whole video on a blurred copy of itself.
     const sameShape = Math.abs(videoAspect - screenAspect) / screenAspect < 0.04;
     layer.classList.toggle('fill', sameShape);
@@ -212,6 +229,7 @@ window.addEventListener('resize', () => { fitBoard(); sizeCanvas(); });
 (async function start() {
   state = await pos.getState();
   saleActive = await pos.getSaleActive();
+  await document.fonts.ready;   // measure with the cartoon fonts, not the fallback
   renderBoard();
   tickClock();
   setInterval(tickClock, 1000 * 15);

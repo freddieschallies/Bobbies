@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMax slice">
+  <!-- Richards Bay beach scene: sky, harbour cranes, lighthouse, sea, sand, palms. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f8fe5"/>
+      <stop offset="0.55" stop-color="#6cc6f5"/>
+      <stop offset="1" stop-color="#c9ecfb"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1aa3c9"/>
+      <stop offset="1" stop-color="#3fd0d6"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7dfa0"/>
+      <stop offset="1" stop-color="#e8c06a"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff8c4"/>
+      <stop offset="0.6" stop-color="#ffe066"/>
+      <stop offset="1" stop-color="#ffe066" stop-opacity="0"/>
+    </radialGradient>
+    <g id="cloud">
+      <ellipse cx="0" cy="0" rx="70" ry="30" fill="#fff"/>
+      <ellipse cx="-45" cy="8" rx="45" ry="22" fill="#fff"/>
+      <ellipse cx="50" cy="10" rx="50" ry="22" fill="#fff"/>
+      <ellipse cx="10" cy="-18" rx="40" ry="26" fill="#fff"/>
+    </g>
+    <g id="frond">
+      <path d="M0 0 C 60 -40 140 -40 200 10 C 140 -10 70 -5 0 0 Z" fill="#2e9e3a" stroke="#14481b" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M20 -6 L 40 -30 M60 -14 L 80 -36 M100 -18 L 118 -38 M140 -16 L 156 -32" stroke="#14481b" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <g id="palm">
+      <path d="M-14 0 C -10 -120 0 -240 26 -360 L 44 -356 C 24 -240 16 -120 14 0 Z" fill="#a8743f" stroke="#4a2e12" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M-8 -60 L 14 -56 M-4 -120 L 18 -116 M2 -180 L 24 -176 M10 -240 L 30 -236 M18 -300 L 38 -296" stroke="#4a2e12" stroke-width="4"/>
+      <g transform="translate(36 -360)">
+        <use href="#frond" transform="rotate(-10)"/>
+        <use href="#frond" transform="rotate(25)"/>
+        <use href="#frond" transform="scale(-1 1) rotate(-10)"/>
+        <use href="#frond" transform="scale(-1 1) rotate(25)"/>
+        <use href="#frond" transform="rotate(-60) scale(0.8)"/>
+        <use href="#frond" transform="scale(-1 1) rotate(-60) scale(0.8)"/>
+        <circle cx="-8" cy="12" r="12" fill="#6b4a1f" stroke="#2d1d08" stroke-width="4"/>
+        <circle cx="12" cy="14" r="12" fill="#6b4a1f" stroke="#2d1d08" stroke-width="4"/>
+      </g>
+    </g>
+    <g id="crane" fill="#3a4f7a" stroke="#1d2a44" stroke-width="3" stroke-linejoin="round">
+      <path d="M0 0 L 10 -150 L 22 -150 L 30 0 Z"/>
+      <path d="M-70 -150 L 130 -150 L 130 -140 L -70 -140 Z"/>
+      <path d="M16 -150 L 16 -185 L -60 -150 M16 -185 L 125 -150" fill="none"/>
+      <path d="M100 -140 L 100 -95" fill="none"/>
+      <rect x="92" y="-98" width="16" height="10"/>
+    </g>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <circle cx="1560" cy="170" r="150" fill="url(#sun)"/>
+  <use href="#cloud" transform="translate(300 140) scale(1.2)"/>
+  <use href="#cloud" transform="translate(860 90) scale(0.9)"/>
+  <use href="#cloud" transform="translate(1300 230) scale(0.7)"/>
+  <use href="#cloud" transform="translate(1780 80) scale(0.8)"/>
+
+  <!-- harbour on the horizon -->
+  <g transform="translate(1220 640)">
+    <use href="#crane"/>
+    <use href="#crane" transform="translate(150 6) scale(0.85)"/>
+    <use href="#crane" transform="translate(290 10) scale(0.75)"/>
+    <rect x="-40" y="-14" width="420" height="16" fill="#3a4f7a" stroke="#1d2a44" stroke-width="3"/>
+  </g>
+  <!-- ship -->
+  <g transform="translate(980 630)" stroke="#1d2a44" stroke-width="3" stroke-linejoin="round">
+    <path d="M0 0 L 170 0 L 150 24 L 14 24 Z" fill="#c0392b"/>
+    <rect x="20" y="-26" width="34" height="26" fill="#f39c12"/>
+    <rect x="58" y="-26" width="34" height="26" fill="#2980b9"/>
+    <rect x="96" y="-26" width="34" height="26" fill="#27ae60"/>
+    <rect x="134" y="-46" width="22" height="46" fill="#ecf0f1"/>
+  </g>
+
+  <!-- sea -->
+  <path d="M0 650 L 1920 650 L 1920 860 L 0 860 Z" fill="url(#sea)"/>
+  <g fill="none" stroke="#e9fbff" stroke-width="6" stroke-linecap="round" opacity="0.8">
+    <path d="M60 700 q 30 -14 60 0 t 60 0"/>
+    <path d="M420 740 q 30 -14 60 0 t 60 0 t 60 0"/>
+    <path d="M900 700 q 30 -14 60 0 t 60 0"/>
+    <path d="M1300 760 q 30 -14 60 0 t 60 0 t 60 0"/>
+    <path d="M1700 712 q 30 -14 60 0 t 60 0"/>
+  </g>
+  <!-- dolphin -->
+  <g transform="translate(560 690) rotate(-18)">
+    <path d="M0 0 C 30 -50 110 -60 150 -20 L 175 -26 L 160 -6 C 120 -20 60 -20 20 10 Z" fill="#5d7fa3" stroke="#1d2a44" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M80 -48 L 96 -78 L 104 -44 Z" fill="#5d7fa3" stroke="#1d2a44" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="140" cy="-24" r="4" fill="#1d2a44"/>
+  </g>
+
+  <!-- lighthouse on the dune -->
+  <g transform="translate(1660 640)" stroke="#2b1b14" stroke-width="5" stroke-linejoin="round">
+    <path d="M-40 0 L -26 -230 L 26 -230 L 40 0 Z" fill="#fff"/>
+    <path d="M-37 -50 L 37 -50 L 34 -100 L -34 -100 Z" fill="#e53935"/>
+    <path d="M-32 -150 L 32 -150 L 29 -200 L -29 -200 Z" fill="#e53935"/>
+    <rect x="-36" y="-246" width="72" height="16" fill="#333"/>
+    <rect x="-22" y="-290" width="44" height="44" fill="#ffe066"/>
+    <path d="M-30 -290 L 0 -322 L 30 -290 Z" fill="#e53935"/>
+  </g>
+
+  <!-- sand -->
+  <path d="M0 830 C 300 790 700 820 1000 805 C 1350 790 1650 815 1920 795 L 1920 1080 L 0 1080 Z" fill="url(#sand)" stroke="#c99a3e" stroke-width="5"/>
+  <g fill="#c99a3e" opacity="0.6">
+    <circle cx="200" cy="930" r="5"/><circle cx="520" cy="980" r="4"/><circle cx="880" cy="900" r="5"/>
+    <circle cx="1220" cy="960" r="4"/><circle cx="1500" cy="910" r="5"/><circle cx="1780" cy="1000" r="4"/>
+  </g>
+
+  <!-- palms -->
+  <use href="#palm" transform="translate(110 980) scale(1.25)"/>
+  <use href="#palm" transform="translate(300 1000) scale(0.95) rotate(8)"/>
+  <use href="#palm" transform="translate(1820 990) scale(-1.15 1.15)"/>
+  <!-- dune grass -->
+  <g fill="#3c9c3c" stroke="#14481b" stroke-width="4" stroke-linejoin="round">
+    <path d="M1480 840 l 10 -60 l 8 60 l 14 -50 l 4 50 l 16 -40 l 0 40 Z"/>
+    <path d="M520 860 l 10 -50 l 8 50 l 14 -40 l 4 40 Z"/>
+  </g>
+</svg>

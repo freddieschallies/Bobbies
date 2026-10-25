@@ -21,6 +21,15 @@ async function api(method, ...args) {
 }
 const product = (id) => state.products.find((p) => p.id === id);
 const catName = (id) => (state.categories.find((c) => c.id === id) || {}).name || '—';
+const catClass = (id) => `cat-c${Math.max(0, state.categories.findIndex((c) => c.id === id)) % 6}`;
+
+// "BGF420 Clubhouse" -> green "BGF420" + white "Clubhouse"
+function brandHTML(name) {
+  const words = String(name || '').trim().split(/\s+/);
+  if (words.length < 2) return esc(name);
+  const last = words.pop();
+  return `${esc(words.join(' '))} <span class="white">${esc(last)}</span>`;
+}
 
 let toastTimer;
 function toast(msg, isError = false) {
@@ -110,7 +119,7 @@ function visibleProducts() {
 function renderCatTabs() {
   const searching = $('search').value.trim() !== '';
   $('catTabs').innerHTML = state.categories.map((c) =>
-    `<button class="cat-tab ${!searching && c.id === activeCat ? 'active' : ''}" data-cat="${c.id}">${esc(c.name)}</button>`).join('');
+    `<button class="cat-tab ${catClass(c.id)} ${!searching && c.id === activeCat ? 'active' : ''}" data-cat="${c.id}">${esc(c.name)}</button>`).join('');
 }
 
 function renderGrid() {
@@ -127,7 +136,7 @@ function renderGrid() {
   $('productGrid').innerHTML = list.map((p) => {
     const low = fmt.isLow(p);
     const out = p.stock <= 0;
-    return `<button class="product ${out ? 'out' : ''} ${p.id === hiId ? 'highlight' : ''}" data-id="${p.id}" ${out ? 'disabled' : ''}>
+    return `<button class="product ${catClass(p.categoryId)} ${out ? 'out' : ''} ${p.id === hiId ? 'highlight' : ''}" data-id="${p.id}" ${out ? 'disabled' : ''}>
       <span class="p-name">${esc(p.name)}</span>
       <span class="p-price">${esc(fmt.perUnit(p))}</span>
       <span class="p-stock ${low ? 'low' : ''}">${out ? 'Out of stock' : `${esc(fmt.qty(p.stock, p.unit))} left${low ? ' · low' : ''}`}</span>
@@ -484,6 +493,8 @@ async function renderCashup() {
 // ---------------------------------------------------------------- settings: general
 function fillGeneral() {
   $('setShopName').value = state.settings.shopName;
+  $('setTagline').value = state.settings.tagline || '';
+  $('setSlogan').value = state.settings.slogan || '';
   $('setAutoStart').checked = state.settings.autoStart;
 }
 
@@ -491,7 +502,8 @@ function fillGeneral() {
 function applyState(s) {
   state = s;
   if (!state.categories.some((c) => c.id === activeCat)) activeCat = state.categories[0] ? state.categories[0].id : null;
-  $('shopName').textContent = state.settings.shopName;
+  $('shopName').innerHTML = brandHTML(state.settings.shopName);
+  $('shopTag').textContent = state.settings.tagline || '';
   document.title = `${state.settings.shopName} POS`;
   renderCatTabs();
   saleChanged();
@@ -627,7 +639,12 @@ function wire() {
   $('btnPrintCashup').addEventListener('click', () => window.print());
   $('btnSaveGeneral').addEventListener('click', async () => {
     try {
-      await api('updateSettings', { shopName: $('setShopName').value, autoStart: $('setAutoStart').checked });
+      await api('updateSettings', {
+        shopName: $('setShopName').value,
+        tagline: $('setTagline').value,
+        slogan: $('setSlogan').value,
+        autoStart: $('setAutoStart').checked,
+      });
       toast('Saved');
     } catch (err) { toast(err.message, true); }
   });

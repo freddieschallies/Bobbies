@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 -140 260 230">
+  <!-- Cartoon seven-point leaf -->
+  <defs>
+    <path id="lf" d="M0 0 C 14 -26 16 -70 0 -118 C -16 -70 -14 -26 0 0 Z"/>
+  </defs>
+  <g fill="#4cc74a" stroke="#123d14" stroke-width="6" stroke-linejoin="round">
+    <use href="#lf" transform="rotate(-82) scale(0.55)"/>
+    <use href="#lf" transform="rotate(82) scale(0.55)"/>
+    <use href="#lf" transform="rotate(-55) scale(0.8)"/>
+    <use href="#lf" transform="rotate(55) scale(0.8)"/>
+    <use href="#lf" transform="rotate(-25) scale(0.95)"/>
+    <use href="#lf" transform="rotate(25) scale(0.95)"/>
+    <use href="#lf"/>
+  </g>
+  <path d="M0 0 L 0 80" stroke="#123d14" stroke-width="8" stroke-linecap="round"/>
+  <path d="M0 0 L 0 80" stroke="#4cc74a" stroke-width="3" stroke-linecap="round"/>
+</svg>

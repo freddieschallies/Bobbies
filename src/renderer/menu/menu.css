@@ -1,125 +1,160 @@
-/* Customer menu board. Fred will be refining the visuals — colours and fonts
-   are all in the variables below. */
-:root {
-  --bg: #0b0d0c;
-  --bg-2: #121614;
-  --text: #f2f5f1;
-  --muted: #94a39a;
-  --accent: #7ed957;
-  --accent-2: #3e8e41;
-  --low: #ffb547;
-  --rule: rgba(255, 255, 255, 0.08);
-  font-size: 22px; /* auto-shrunk by menu.js when the list gets long */
-}
+/* BGF420 Clubhouse — TV menu. Sizes use vh so it scales to any TV.
+   The frame never changes; videos play inside .stage. */
 
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); cursor: none; }
-body {
-  color: var(--text);
-  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
+html, body { margin: 0; height: 100%; overflow: hidden; cursor: none; }
+body { color: var(--ink); font-family: var(--font-body); font-weight: 800; }
 
-.menu {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 2.2vh 2.4vw;
-  background:
-    radial-gradient(ellipse at 15% 0%, rgba(126, 217, 87, 0.10), transparent 55%),
-    radial-gradient(ellipse at 90% 100%, rgba(62, 142, 65, 0.12), transparent 50%),
-    var(--bg);
-}
+.frame { position: absolute; inset: 0; display: flex; flex-direction: column; }
 
+/* ---------- header: wooden tiki sign ---------- */
 .menu-head {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  border-bottom: 2px solid var(--accent-2);
-  padding-bottom: 1vh;
-  margin-bottom: 1.6vh;
+  align-items: center;
+  padding: 1vh 2.2vw 0.8vh;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.09) 0 0.3vh, transparent 0.3vh 6vh),
+    linear-gradient(var(--wood), var(--wood-dark));
+  border-bottom: 0.4vh solid var(--ink);
+  position: relative;
+  z-index: 2;
 }
-.menu-head h1 {
-  margin: 0;
-  font-size: 2.4rem;
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  text-transform: uppercase;
+.brand { line-height: 1; }
+.bobby-g { font-size: 2.6vh; margin-bottom: -0.4vh; transform: rotate(-3deg); display: inline-block; color: #fff; }
+.brand-name { margin: 0; font-size: 7.4vh; font-weight: 400; }
+.brand-tag { font-size: 2.4vh; margin-top: 0.4vh; }
+.head-right { display: flex; align-items: center; gap: 2vw; }
+.place { font-size: 3.2vh; text-align: right; line-height: 1.05; color: #fff; transform: rotate(-4deg); }
+.place span { color: var(--sun); }
+.clock-badge {
+  background: var(--ink);
+  border: 0.4vh solid var(--sun);
+  border-radius: 1.4vh;
+  padding: 0.6vh 1.4vw;
+  text-align: center;
+  color: #fff;
+  font-size: 1.9vh;
 }
-.clock { color: var(--muted); font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.clock { font-family: var(--font-display); color: var(--sun); font-size: 5vh; line-height: 1; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.thatch { height: 3.6vh; background-size: 28vh 100%; margin-top: -0.3vh; position: relative; z-index: 1; }
 
-.board {
+/* ---------- middle: Bobby + the stage ---------- */
+.body { flex: 1; min-height: 0; display: flex; gap: 1.6vw; padding: 0 2vw 0 1.4vw; margin-top: -1.2vh; }
+.side {
+  width: 22vw;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2vh;
+  position: relative;
+}
+.side-mascot { width: min(20vw, 46vh); aspect-ratio: 1; border-width: 0.6vh; box-shadow: 0 0 0 0.9vh var(--sun), 0 0 0 1.5vh var(--ink), 0 2vh 0 1.5vh rgba(0, 0, 0, 0.25); }
+.side-line { font-size: 5vh; text-align: center; line-height: 1.05; transform: rotate(-5deg); }
+.side-leaf { position: absolute; width: 9vh; left: 0; bottom: 3vh; transform: rotate(-20deg); filter: drop-shadow(0 0.5vh 0 rgba(0, 0, 0, 0.3)); }
+
+.stage {
   flex: 1;
-  min-height: 0;
-  column-count: 3;       /* set by menu.js: 3 on a wide TV, 1 on a portrait one */
-  column-gap: 3vw;
-  column-fill: balance;
+  min-width: 0;
+  position: relative;
+  margin: 2.4vh 0 1.6vh;
+  background: var(--paper);
+  border: 0.55vh solid var(--ink);
+  border-radius: 2.6vh;
+  box-shadow: 0 1vh 0 var(--ink), 0 0 0 1vh rgba(255, 255, 255, 0.35);
   overflow: hidden;
 }
 
+/* ---------- menu board ---------- */
+.board {
+  position: absolute;
+  inset: 0;
+  padding: 2.4vh 1.6vw;
+  column-count: 3;
+  column-gap: 1.4vw;
+  column-fill: balance;
+  overflow: hidden;
+}
 .cat {
   break-inside: avoid-column;
-  margin-bottom: 1.4em;
+  margin-bottom: 1.2em;
+  background: #fff;
+  border: 0.18em solid var(--ink);
+  border-radius: 0.8em;
+  box-shadow: 0 0.25em 0 var(--ink);
+  overflow: hidden;
 }
 .cat h2 {
-  margin: 0 0 0.4em;
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent);
+  margin: 0;
+  padding: 0.25em 0.6em 0.15em;
+  font: 400 1.6em var(--font-display);
+  letter-spacing: 0.06em;
+  background: var(--cat);
+  color: #fff;
+  -webkit-text-stroke: 0.08em var(--ink);
+  paint-order: stroke fill;
+  border-bottom: 0.12em solid var(--ink);
   display: flex;
   align-items: center;
-  gap: 0.6em;
+  gap: 0.4em;
 }
-.cat h2::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
-
+.cat h2 img { height: 1em; filter: drop-shadow(0 0.06em 0 var(--ink)); }
+.items { padding: 0.2em 0.7em 0.4em; }
 .item {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: baseline;
   gap: 0 0.8em;
-  padding: 0.38em 0;
-  border-bottom: 1px solid var(--rule);
+  padding: 0.4em 0;
+  border-bottom: 0.1em dashed #e2d3b4;
   break-inside: avoid;
 }
-.item .name { font-weight: 600; font-size: 1rem; }
-.item .price { font-weight: 700; font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.item .unit { color: var(--muted); font-weight: 500; font-size: 0.75em; }
-.item .desc { grid-column: 1 / -1; color: var(--muted); font-size: 0.72rem; margin-top: 0.1em; }
+.item:last-child { border-bottom: 0; }
+.item .name { font-weight: 900; font-size: 1em; }
+.item .price {
+  font: 400 1.25em var(--font-display);
+  letter-spacing: 0.04em;
+  color: var(--leaf);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.item .unit { color: var(--ink-soft); font: 800 0.6em var(--font-body); letter-spacing: 0; }
+.item .desc { grid-column: 1 / -1; color: var(--ink-soft); font-size: 0.72em; font-weight: 600; margin-top: 0.1em; }
 .badge {
   display: inline-block;
   margin-left: 0.5em;
-  padding: 0.1em 0.5em;
-  border-radius: 999px;
-  font-size: 0.6rem;
-  font-weight: 800;
+  padding: 0.15em 0.55em 0.1em;
+  border-radius: 0.4em;
+  font: 400 0.7em var(--font-display);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: #fff;
+  background: var(--red);
+  border: 0.12em solid var(--ink);
+  transform: rotate(-4deg);
   vertical-align: middle;
-  color: #241600;
-  background: var(--low);
 }
 .item.changed { animation: flash 2.4s ease-out; }
 @keyframes flash {
-  0% { background: rgba(126, 217, 87, 0.35); }
+  0% { background: rgba(255, 210, 63, 0.7); }
   100% { background: transparent; }
 }
-
 .empty-board {
   height: 100%;
   display: grid;
   place-items: center;
-  color: var(--muted);
-  font-size: 1.4rem;
+  font: 400 6vh var(--font-display);
+  letter-spacing: 0.05em;
+  color: var(--leaf);
 }
 
-/* ---------- video takeover ---------- */
+/* ---------- video inside the stage ---------- */
 .video-layer {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--paper);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease;
@@ -131,15 +166,26 @@ body {
   width: 100%;
   height: 100%;
   transform: scale(1.15);
-  filter: blur(28px) brightness(0.7) saturate(1.3);
+  filter: blur(28px) brightness(0.75) saturate(1.3);
 }
-.vid {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: transparent;
-}
+.vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: transparent; }
 .video-layer.fill .vid { object-fit: cover; }
 .video-layer.fill .blur-bg { display: none; }
+
+/* ---------- footer on the sand ---------- */
+.menu-foot {
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4vw;
+}
+.menu-foot span { font-size: 4.4vh; }
+.menu-foot img { height: 5.4vh; filter: drop-shadow(0 0.4vh 0 rgba(0, 0, 0, 0.3)); }
+
+/* ---------- portrait TV: drop Bobby's side column ---------- */
+@media (max-aspect-ratio: 1/1) {
+  .side { display: none; }
+  .brand-name { font-size: 5vh; }
+  .place { display: none; }
+}

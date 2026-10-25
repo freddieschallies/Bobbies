@@ -2,19 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
-  <title>Bobbies POS</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'">
+  <title>BGF420 Clubhouse POS</title>
+  <link rel="stylesheet" href="../shared/theme.css">
   <link rel="stylesheet" href="till.css">
 </head>
-<body>
+<body class="beach-bg">
   <header class="topbar">
-    <div class="brand" id="shopName">Bobbies</div>
+    <div class="mascot head-mascot" aria-hidden="true"></div>
+    <div class="brand">
+      <div class="toon-title brand-name" id="shopName">BGF420 <span class="white">Clubhouse</span></div>
+      <div class="toon-script brand-tag" id="shopTag"></div>
+    </div>
     <nav class="views">
       <button class="view-btn active" data-view="sell">Sell</button>
       <button class="view-btn" data-view="settings">Settings <kbd>F10</kbd></button>
     </nav>
     <div class="clock" id="clock"></div>
   </header>
+  <div class="thatch"></div>
 
   <main>
     <!-- ================= SELL ================= -->
@@ -111,6 +117,8 @@
       <div class="panel" id="panel-general" hidden>
         <div class="card narrow">
           <label>Shop name <input id="setShopName" class="input"></label>
+          <label>Tagline (under the name) <input id="setTagline" class="input"></label>
+          <label>Slogan (bottom of the TV menu) <input id="setSlogan" class="input"></label>
           <label class="check"><input id="setAutoStart" type="checkbox"> Start Bobbies POS when the PC switches on</label>
           <button id="btnSaveGeneral" class="btn">Save</button>
         </div>

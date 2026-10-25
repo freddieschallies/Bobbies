@@ -1,0 +1,74 @@
+/* BGF420 Clubhouse — Richards Bay beach-cartoon theme, shared by the till and the TV.
+   Fonts are bundled so it all works with no internet. */
+@font-face { font-family: "Bangers"; src: url("fonts/bangers.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "Marker"; src: url("fonts/permanent-marker.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "Nunito"; src: url("fonts/nunito-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+@font-face { font-family: "Nunito"; src: url("fonts/nunito-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+@font-face { font-family: "Nunito"; src: url("fonts/nunito-900.woff2") format("woff2"); font-weight: 900; font-display: block; }
+
+:root {
+  --ink: #1a120b;          /* cartoon outline colour */
+  --ink-soft: #4a3a2c;
+  --paper: #fffaf0;        /* cream card */
+  --paper-2: #fdf0d5;
+  --lime: #6fd13c;
+  --leaf: #2f9e2f;
+  --sun: #ffd23f;
+  --orange: #ff8c1a;
+  --teal: #1fb5b0;
+  --sea: #1a9fd6;
+  --purple: #8e44c9;
+  --red: #e53935;
+  --wood: #7a4b1d;
+  --wood-dark: #4f2f10;
+  --sand: #f3d58c;
+  --font-display: "Bangers", "Impact", sans-serif;
+  --font-script: "Marker", "Comic Sans MS", cursive;
+  --font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --outline: 3px solid var(--ink);
+  --pop: 0 5px 0 var(--ink);
+  --radius: 16px;
+}
+
+/* Category colours, in category order — repeats after six */
+.cat-c0 { --cat: #3fb52f; --cat-ink: #0f3d0b; }
+.cat-c1 { --cat: #ff9f1c; --cat-ink: #4a2600; }
+.cat-c2 { --cat: #9b4fd6; --cat-ink: #fff; }
+.cat-c3 { --cat: #2b8ae6; --cat-ink: #fff; }
+.cat-c4 { --cat: #1fb5b0; --cat-ink: #053b39; }
+.cat-c5 { --cat: #e5484d; --cat-ink: #fff; }
+
+/* Chunky cartoon lettering with a black outline */
+.toon-title {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  color: var(--lime);
+  -webkit-text-stroke: 0.08em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0.08em 0 var(--ink);
+  line-height: 0.95;
+}
+.toon-title .white { color: #fff; }
+.toon-script {
+  font-family: var(--font-script);
+  color: var(--sun);
+  -webkit-text-stroke: 0.06em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0.06em 0 var(--ink);
+}
+
+.thatch {
+  height: 26px;
+  background: url("img/thatch.svg") repeat-x left top / 200px 100%;
+}
+
+.beach-bg {
+  background: url("img/beach.svg") center bottom / cover no-repeat, #6cc6f5;
+}
+
+.mascot {
+  border-radius: 50%;
+  border: 4px solid var(--ink);
+  box-shadow: 0 0 0 5px var(--sun), 0 6px 0 5px var(--ink);
+  background: #fff url("img/bobby.jpg") center 18% / cover no-repeat;
+}

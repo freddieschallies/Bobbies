@@ -1,6 +1,6 @@
 {
   "name": "bobbies-pos",
-  "productName": "Bobbies POS",
+  "productName": "BGF420 Clubhouse POS",
   "version": "0.1.0",
   "description": "Point of sale with a live customer menu screen and promo videos.",
   "main": "src/main/main.js",
@@ -18,7 +18,7 @@
   },
   "build": {
     "appId": "za.co.bobbies.pos",
-    "productName": "Bobbies POS",
+    "productName": "BGF420 Clubhouse POS",
     "files": [
       "src/**/*",
       "package.json"
@@ -30,7 +30,7 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "Bobbies POS"
+      "shortcutName": "BGF420 POS"
     }
   }
 }

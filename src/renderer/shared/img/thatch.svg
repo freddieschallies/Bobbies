@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" preserveAspectRatio="none">
+  <!-- Repeating tiki-bar thatch edge -->
+  <path d="M0 0 H200 V40 L190 62 L180 44 L168 66 L156 46 L144 64 L132 44 L120 66 L108 46 L96 62 L84 44 L72 66 L60 46 L48 64 L36 44 L24 66 L12 46 L0 62 Z"
+        fill="#d9a54a" stroke="#6b4416" stroke-width="3" stroke-linejoin="round"/>
+  <g stroke="#9c6a24" stroke-width="2" stroke-linecap="round">
+    <path d="M6 4 L10 50"/><path d="M18 2 L22 58"/><path d="M30 6 L33 46"/><path d="M42 3 L45 58"/>
+    <path d="M54 5 L57 48"/><path d="M66 2 L69 60"/><path d="M78 6 L81 46"/><path d="M90 3 L93 56"/>
+    <path d="M102 5 L105 48"/><path d="M114 2 L117 60"/><path d="M126 6 L129 46"/><path d="M138 3 L141 58"/>
+    <path d="M150 5 L153 48"/><path d="M162 2 L165 60"/><path d="M174 6 L177 46"/><path d="M186 3 L189 56"/>
+  </g>
+  <path d="M0 10 H200" stroke="#6b4416" stroke-width="5"/>
+</svg>
