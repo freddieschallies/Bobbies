@@ -169,7 +169,7 @@ function play(v) {
   playing = true;
   lastPlayedId = v.id;
   vid.muted = !state.settings.videoSound;
-  vid.src = `media://v/${encodeURIComponent(v.file)}`;
+  vid.src = pos.videoUrl(v.file);
   vid.onloadedmetadata = () => {
     const screenAspect = stageAspect();
     const videoAspect = vid.videoWidth / vid.videoHeight;

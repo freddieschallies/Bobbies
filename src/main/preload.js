@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('pos', {
   addVideos: () => ipcRenderer.invoke('videos:add'),
   removeVideo: (id) => ipcRenderer.invoke('videos:remove', id),
   testVideo: () => ipcRenderer.send('video:test'),
+  videoUrl: (file) => `media://v/${encodeURIComponent(file)}`,
   onTestVideo: (cb) => ipcRenderer.on('video:test', () => cb()),
 
   placeMenu: () => ipcRenderer.invoke('menu:place'),
